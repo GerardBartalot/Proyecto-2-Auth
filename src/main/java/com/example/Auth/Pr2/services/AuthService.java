@@ -5,4 +5,6 @@ import com.example.Auth.Pr2.commons.dtos.UserRequest;
 
 public interface AuthService {
     TokenResponse createUser(UserRequest userRequest);
+
+    TokenResponse loginUser(UserRequest userRequest);
 }
