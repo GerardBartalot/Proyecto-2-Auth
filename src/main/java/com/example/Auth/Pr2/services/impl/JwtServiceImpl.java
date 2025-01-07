@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+import io.jsonwebtoken.security.Keys;
+
 @Service
 public class JwtServiceImpl implements JwtService {
-    private final String secretToken;
+    private final byte[] secretKey;
 
     public JwtServiceImpl(@Value("${jwt.secret}") String secretToken) {
-        this.secretToken = secretToken;
+        this.secretKey = secretToken.getBytes();
     }
 
     @Override
@@ -26,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
                 .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, this.secretToken)
+                .signWith(Keys.hmacShaKeyFor(secretKey), SignatureAlgorithm.HS512) // Usamos Keys.hmacShaKeyFor
                 .compact();
 
         return TokenResponse.builder()
@@ -37,7 +39,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(this.secretToken)
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey)) // Usamos Keys.hmacShaKeyFor
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -45,7 +47,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public boolean isExpired(String token) {
-        try{
+        try {
             return getClaims(token).getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
@@ -54,10 +56,11 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public Integer extractUserId(String token) {
-        try{
+        try {
             return Integer.parseInt(getClaims(token).getSubject());
         } catch (Exception e) {
             return null;
         }
     }
 }
+
