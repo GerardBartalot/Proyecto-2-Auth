@@ -1,6 +1,7 @@
-package com.example.Auth.Pr2.services;
+package com.example.Auth.Pr2.services.impl;
 
 import com.example.Auth.Pr2.commons.dtos.TokenResponse;
+import com.example.Auth.Pr2.services.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
