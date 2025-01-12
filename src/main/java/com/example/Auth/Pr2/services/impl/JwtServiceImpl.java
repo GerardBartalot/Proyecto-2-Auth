@@ -14,10 +14,10 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtServiceImpl implements JwtService {
-    private final byte[] secretKey;
+    private final String secretKey;
 
     public JwtServiceImpl(@Value("${jwt.secret}") String secretToken) {
-        this.secretKey = secretToken.getBytes();
+        this.secretKey = secretToken;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
                 .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(expirationDate)
-                .signWith(Keys.hmacShaKeyFor(secretKey), SignatureAlgorithm.HS512) // Usamos Keys.hmacShaKeyFor
+                .signWith(SignatureAlgorithm.HS512, secretKey) // Usamos signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
 
         return TokenResponse.builder()
@@ -39,7 +39,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKey)) // Usamos Keys.hmacShaKeyFor
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
