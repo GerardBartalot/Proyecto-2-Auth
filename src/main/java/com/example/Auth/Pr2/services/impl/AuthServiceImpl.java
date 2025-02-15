@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenResponse createUser(UserRequest userRequest) {
+    public TokenResponse registerUser(UserRequest userRequest) {
         return Optional.of(userRequest)
                 .map(this::mapToEntity)
                 .map(userRepository::save)
@@ -34,16 +34,19 @@ public class AuthServiceImpl implements AuthService {
 
     private UserModel mapToEntity(UserRequest userRequest) {
         return UserModel.builder()
+                .username(userRequest.getUsername())
                 .email(userRequest.getEmail())
                 .password(userRequest.getPassword())
+                .name(userRequest.getName())
                 .role("USER")
                 .build();
     }
 
+
     @Override
     public TokenResponse loginUser(UserRequest userRequest) {
-        return userRepository.findByEmail(userRequest.getEmail())
-                .filter(user -> user.getPassword().equals(userRequest.getPassword())) // Comparación directa
+        return userRepository.findByUsername(userRequest.getUsername())
+                .filter(user -> user.getPassword().equals(userRequest.getPassword()))
                 .map(user -> jwtService.generateToken(user.getId()))
                 .orElseThrow(() -> new UserNotFoundException(HttpStatus.NOT_FOUND, "User not found"));
     }

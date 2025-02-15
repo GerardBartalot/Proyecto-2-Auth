@@ -5,7 +5,6 @@ import com.example.Auth.Pr2.commons.dtos.UserRequest;
 import com.example.Auth.Pr2.controllers.AuthApi;
 import com.example.Auth.Pr2.services.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,8 +16,8 @@ public class AuthController implements AuthApi {
     }
 
     @Override
-    public ResponseEntity<TokenResponse> createUser(UserRequest userRequest) {
-        return ResponseEntity.ok(authService.createUser(userRequest));
+    public ResponseEntity<TokenResponse> registerUser(UserRequest userRequest) {
+        return ResponseEntity.ok(authService.registerUser(userRequest));
     }
 
     @Override
