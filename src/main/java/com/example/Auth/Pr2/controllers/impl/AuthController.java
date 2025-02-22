@@ -25,5 +25,4 @@ public class AuthController implements AuthApi {
         return ResponseEntity.ok(authService.loginUser(userRequest));
     }
 
-
 }

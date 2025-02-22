@@ -1,7 +1,6 @@
 package com.example.Auth.Pr2.config;
 
 import com.example.Auth.Pr2.services.impl.UserDetailsServiceImpl;
-import jdk.jfr.Enabled;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,12 +32,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request -> request.requestMatchers("v3/api-docs/**", "/swagger-ui/**", "v1/**")
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("v3/api-docs/**", "/swagger-ui/**", "v1/**")
                         .permitAll()
                         .anyRequest().authenticated()
-                ).sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
-                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                ).sessionManagement(manager -> manager
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authenticationProvider(authenticationProvider())
+                        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -57,7 +58,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager autheticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager autheticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }

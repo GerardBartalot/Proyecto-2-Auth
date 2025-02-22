@@ -9,11 +9,7 @@ import lombok.*;
 @Builder
 public class UserRequest {
     @NonNull
-    private String username;
-    @NonNull
-    private String password;
-
-    private String name;
     private String email;
+    private String password;
 
 }

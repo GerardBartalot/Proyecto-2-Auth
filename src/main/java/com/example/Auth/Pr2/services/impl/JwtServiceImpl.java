@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-import io.jsonwebtoken.security.Keys;
-
 @Service
 public class JwtServiceImpl implements JwtService {
     private final String secretKey;

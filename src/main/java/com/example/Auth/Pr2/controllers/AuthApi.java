@@ -17,4 +17,3 @@ public interface AuthApi {
     @PostMapping(value = "/login")
     ResponseEntity<TokenResponse> loginUser(@RequestBody @Valid UserRequest userRequest);
 }
-

@@ -20,9 +20,8 @@ public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private String username;
-    private String password;
     private String email;
+    private String password;
     private String name;
     private String role;
 
@@ -33,7 +32,7 @@ public class UserModel implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
